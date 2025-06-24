@@ -109,6 +109,33 @@
     <audio data-key="75" src="sounds/tom.wav"></audio>
     <audio data-key="76" src="sounds/tink.wav"></audio>
 
-    <script></script>
+    <script>
+      // This script plays sounds when keys are pressed and adds a visual effect to the keys.
+      const playingSound = (e) => {
+        const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+        const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+        if (!audio) return; // Stop the function if no audio is found
+        key.classList.add("playing");
+        audio.currentTime = 0; // Rewind to the start
+        audio.play();
+      };
+
+      // This function removes the "playing" class from the key after the transition ends.
+      const removeTransition = (e) => {
+        if (e.propertyName !== "transform") return; // Skip if not transform
+        e.target.classList.remove("playing");
+      };
+
+      // Select all keys and add event listeners for transition end and keydown events.
+      const keys = document.querySelectorAll(".key");
+
+      // Add transition end event listener to each key
+      keys.forEach((key) =>
+        key.addEventListener("transitionend", removeTransition)
+      );
+
+      // Add keydown event listener to the window to play sound
+      window.addEventListener("keydown", playingSound);
+    </script>
   </body>
 </html>
